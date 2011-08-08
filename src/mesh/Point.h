@@ -8,6 +8,7 @@
 #ifndef POINT_H_
 #define POINT_H_
 
+#include <iostream>
 #include "math.h"
 
 class Point {
@@ -30,6 +31,11 @@ public:
 	void setCoords(int dim, double c) {
 		coord[dim] = c;
 	}
+
+	void Print() {
+		std::cout << "Point coords: " << coord[0] << " " << coord[1] << " " << coord[2] << std::endl;
+	}
+
 };
 
 #endif /* POINT_H_ */

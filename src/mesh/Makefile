@@ -1,6 +1,6 @@
 include ../Makefile.inc
 
-OBJS = Mesh.o Point.o Element.o Face.o Triangle.o Triangle3.o Cell.o
+OBJS = Mesh.o Point.o Element.o Face.o Triangle.o Triangle3.o Cell.o ElementAssemblyVisitor.o Brick.o
 
 all: ../libmesh.a
 	

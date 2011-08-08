@@ -11,11 +11,11 @@
 #include "Element.h"
 
 class Face : public Element {
+
 public:
 	virtual int getDimension() {
 		return 2;
 	}
-
 };
 
 
