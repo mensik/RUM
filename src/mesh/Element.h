@@ -13,14 +13,29 @@
 #include "ElementAssemblyVisitor.h"
 #include "Epetra_SerialDenseMatrix.h"
 
+
+//! Element: This class represents an abstrac ancestor for all geometric elements
+
+/*! Element class consits of common features for all geometric elements. Allmost all
+ *  its function are pure virtual and have to be implemted in descendats.
+ */
+
 class Element {
 public:
-	//	virtual int getNumNodes();
+
+	//! @name Geometric functions
+	//@ {
 	virtual int getDimension() = 0;
-	virtual void acceptAssembly(ElementAssemblyVisitor *visitor) = 0;
-	virtual void acceptPrepare(ElementAssemblyVisitor *visitor) = 0;
 
 	virtual Point* getCenter() = 0;
+	//@}
+
+	//! @name Assembly Visitor methods
+	//@{
+	virtual void acceptAssembly(ElementAssemblyVisitor *visitor) = 0;
+
+	virtual void acceptPrepare(ElementAssemblyVisitor *visitor) = 0;
+	//@}
 };
 
 //#include "Triangle3.h"
