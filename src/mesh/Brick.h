@@ -28,21 +28,17 @@ public:
 			vetrices[i] = vet[i];
 	}
 
-	std::vector<GaussPoint*> getGaussPoints(int noGaussPoints);
+	static std::vector<GaussPoint*> getGaussPoints(int noGaussPoints);
 
 	std::vector<Epetra_SerialDenseMatrix> getGaussBasis(int noFunctions, GaussPoint *gp);
 
 	Epetra_SerialDenseMatrix getJacobian(Epetra_SerialDenseMatrix dN);
 
-	virtual void acceptAssembly(ElementAssemblyVisitor *visitor) {
-		visitor->assemble(this);
-	}
-
-	virtual void acceptPrepare(ElementAssemblyVisitor *visitor) {
-		visitor->prepareAssembly(this);
-	}
-
 	virtual Point* getCenter();
+
+	Point* getPoint(int ind) {
+		return vetrices[ind];
+	}
 
 };
 

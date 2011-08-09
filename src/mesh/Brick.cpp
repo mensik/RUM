@@ -10,31 +10,37 @@ Point* Brick::getCenter() {
 
 std::vector<GaussPoint*> Brick::getGaussPoints(int nGaussPoints) {
 
-	std::vector<GaussPoint*> result;
-	double gpVal;
+	std::vector<GaussPoint*> GAUSS_POINTS;
 
-	switch (nGaussPoints) {
-	case 1:
-		result.push_back(new GaussPoint(0, 0, 0, 8));
-		break;
-	case 8:
+	if (GAUSS_POINTS.size() != nGaussPoints) {
 
-		gpVal = 1.0 / sqrt(3.0);
+		GAUSS_POINTS.clear();
 
-		result.push_back(new GaussPoint(-gpVal, -gpVal, -gpVal, 1));
-		result.push_back(new GaussPoint(gpVal, -gpVal, -gpVal, 1));
-		result.push_back(new GaussPoint(gpVal, gpVal, -gpVal, 1));
-		result.push_back(new GaussPoint(-gpVal, gpVal, -gpVal, 1));
-		result.push_back(new GaussPoint(-gpVal, -gpVal, gpVal, 1));
-		result.push_back(new GaussPoint(gpVal, -gpVal, gpVal, 1));
-		result.push_back(new GaussPoint(gpVal, gpVal, gpVal, 1));
-		result.push_back(new GaussPoint(-gpVal, gpVal, gpVal, 1));
+		double gpVal;
 
-	default:
-		break;
+		switch (nGaussPoints) {
+		case 1:
+			GAUSS_POINTS.push_back(new GaussPoint(0, 0, 0, 8));
+			break;
+		case 8:
+
+			gpVal = 1.0 / sqrt(3.0);
+
+			GAUSS_POINTS.push_back(new GaussPoint(-gpVal, -gpVal, -gpVal, 1));
+			GAUSS_POINTS.push_back(new GaussPoint(gpVal, -gpVal, -gpVal, 1));
+			GAUSS_POINTS.push_back(new GaussPoint(gpVal, gpVal, -gpVal, 1));
+			GAUSS_POINTS.push_back(new GaussPoint(-gpVal, gpVal, -gpVal, 1));
+			GAUSS_POINTS.push_back(new GaussPoint(-gpVal, -gpVal, gpVal, 1));
+			GAUSS_POINTS.push_back(new GaussPoint(gpVal, -gpVal, gpVal, 1));
+			GAUSS_POINTS.push_back(new GaussPoint(gpVal, gpVal, gpVal, 1));
+			GAUSS_POINTS.push_back(new GaussPoint(-gpVal, gpVal, gpVal, 1));
+
+		default:
+			break;
+		}
 	}
 
-	return result;
+	return GAUSS_POINTS;
 }
 
 std::vector<Epetra_SerialDenseMatrix> Brick::getGaussBasis(int noFunctions,
@@ -104,7 +110,7 @@ Epetra_SerialDenseMatrix Brick::getJacobian(Epetra_SerialDenseMatrix dN) {
 		}
 	}
 
-	Epetra_SerialDenseMatrix J(3,3);
+	Epetra_SerialDenseMatrix J(3, 3);
 
 	J.Multiply('T', 'N', 1, dN, coordinates, 0);
 

@@ -10,6 +10,12 @@
 
 #include "Element.h"
 
+//! Face: This class represents all 2D elements
+
+/*!
+ *  Face represents all 2D elements (e.g. triangles, rectangles, polygons, ..._
+ */
+
 class Face : public Element {
 
 public:

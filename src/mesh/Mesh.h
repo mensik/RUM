@@ -13,7 +13,7 @@
 #include "Point.h"
 #include "Element.h"
 #include "Triangle3.h"
-#include "Brick.h"
+#include "Brick8.h"
 
 #include <map>
 
@@ -38,7 +38,7 @@ public:
 			nodes.insert(std::pair<int, Point*>(i, vetrices[i]));
 		}
 
-		Brick *THEbrick = new Brick(vetrices);
+		Brick8 *THEbrick = new Brick8(vetrices);
 
 		elements.insert(std::pair<int, Element*>(0, THEbrick));
 	}
