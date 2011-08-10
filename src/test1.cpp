@@ -58,6 +58,7 @@ int main(int argc, char *argv[]) {
 	assembler->setS(new ConstMatrixFunction(2.0));
 	assembler->assembleFEM(mesh, &Comm);
 
+	assembler->assembleFEM(mesh, &Comm);
 
 
 	// Element *e = new Face();
