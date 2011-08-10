@@ -33,7 +33,7 @@ public:
 	}
 
 	void Print() {
-		std::cout << "Point coords: " << coord[0] << " " << coord[1] << " " << coord[2] << std::endl;
+		std::cout << "coords: " << coord[0] << " " << coord[1] << " " << coord[2] << std::endl;
 	}
 
 };

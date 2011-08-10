@@ -4,65 +4,56 @@
 #include "mesh/Mesh.h"
 
 #include "mesh/PointScalarFunction.h"
-#include "FEMLaplaceAssembler.h"
+#include "assembly/FEMLaplaceAssembler.h"
+#include "common/Material.h"
 
 #include "Epetra_MpiComm.h"
+#include "Epetra_Time.h"
+
+#include "EpetraExt_RowMatrixOut.h"
 
 using namespace std;
 
-class ConstFunction: public PointScalarFunction {
-	double value;
-
+class TestMaterial: public Material {
+	Epetra_SerialDenseMatrix* C;
 public:
-	ConstFunction(double v) {
-		this->value = v;
-	}
+	TestMaterial() {
 
-	virtual double getValue(Point *p) {
-		return value;
-	}
-};
-
-class ConstMatrixFunction : public MatrixPointFunction {
-
-	Epetra_SerialDenseMatrix *VAL;
-public:
-	ConstMatrixFunction(double val) {
-		VAL = new Epetra_SerialDenseMatrix(3,3);
+		C = new Epetra_SerialDenseMatrix(3,3);
 		for (int i = 0; i < 3; i++)
-			(*VAL)(i,i) = val;
+			(*C)(i, i) = 1;
 	}
 
-	virtual Epetra_SerialDenseMatrix* getValue(Point *p) {
-		return VAL;
+	virtual Epetra_SerialDenseMatrix* getC() {
+		return C;
 	}
-
 };
 
 int main(int argc, char *argv[]) {
 
 	MPI_Init(&argc, &argv);
-
 	Epetra_MpiComm Comm(MPI_COMM_WORLD);
 
+	Epetra_Time timer(Comm);
+
 	Mesh *mesh = new Mesh();
+	mesh->makeBrickMesh(30);
 
-	mesh->makeOneBrickMesh();
+	TestMaterial* material = new TestMaterial();
 
-	ConstFunction *constFun = new ConstFunction(2.0);
+	for (std::map<int, Element*>::iterator i = mesh->getBeginElementIterator(); i
+			!= mesh->getEndElementIterator(); i++) {
+		i->second->getInfo()->setMaterial(material);
+	}
 
+	FEMLaplaceAssembler *assembler = new FEMLaplaceAssembler();
 
-	FEMLaplaceAssembler *assembler =
-			new FEMLaplaceAssembler(constFun, constFun);
-
-	assembler->setS(new ConstMatrixFunction(2.0));
 	assembler->assembleFEM(mesh, &Comm);
 
-	assembler->assembleFEM(mesh, &Comm);
+	mesh->Print();
+	std::cout << "Time : " << timer.ElapsedTime() << "s" << std::endl;
 
-
-	// Element *e = new Face();
-	// cout << e->getDimension() << endl;
+	EpetraExt::RowMatrixToMatrixMarketFile("../matlab/K.mm", *assembler->getK(), "3D LaplaceBrick", "This is a test matrix");
 
 	MPI_Finalize();
 	return (0);

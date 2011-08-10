@@ -17,6 +17,12 @@ public:
 	Triangle3(Point *a, Point *b, Point *c) : Triangle(a, b, c){
 
 	}
+
+	virtual void Print() {
+		for (int i = 0; i < 3; i++) {
+			vetrices[i]->Print();
+		}
+	}
 	virtual void acceptAssembly(ElementAssemblyVisitor *visitor) {
 		visitor->assemble(this);
 	}

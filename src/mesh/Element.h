@@ -15,6 +15,7 @@
 
 #include <vector>
 
+#include "ElementInfo.h"
 
 //! Element: This class represents an abstrac ancestor for all geometric elements
 
@@ -25,11 +26,15 @@
 
 class Element {
 
+	ElementInfo info;
+
 public:
 
 	//! @name Geometric functions
 	//@ {
 	virtual int getDimension() = 0;
+
+	virtual void Print() = 0;
 
 	virtual Point* getCenter() = 0;
 	//@}
@@ -40,6 +45,10 @@ public:
 
 	virtual void acceptPrepare(ElementAssemblyVisitor *visitor) = 0;
 	//@}
+
+	ElementInfo* getInfo() {
+		return &info;
+	}
 };
 
 //#include "Triangle3.h"

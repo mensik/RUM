@@ -21,6 +21,7 @@
 //! Brick: Represents hexahedral "brick" element
 
 class Brick: public Cell {
+protected:
 	//! Corners of the brick
 	Point *vetrices[8];
 
