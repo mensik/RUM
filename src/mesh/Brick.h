@@ -49,6 +49,8 @@ public:
 	 */
 	static GaussPoint** getGaussPoints(int noGaussPoints);
 
+	virtual double getFaceArea(int idFace);
+
 
 	//! Returns a values and derivations of basis functions in supported gauss point
 	static std::vector<Epetra_SerialDenseMatrix> getGaussBasis(int noFunctions,

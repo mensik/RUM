@@ -1,6 +1,7 @@
-include /home/martin/documents/code/trilinos/build/packages/epetra/Makefile.export.Epetra
-include /home/martin/documents/code/trilinos/build/packages/epetraext/Makefile.export.EpetraExt
-include /home/martin/documents/code/trilinos/build/packages/teuchos/Makefile.export.Teuchos
+TRILINOS_BUILD_HOME=/home/martin/documents/code/trilinos/build
+include $(TRILINOS_BUILD_HOME)/packages/epetra/Makefile.export.Epetra
+include $(TRILINOS_BUILD_HOME)/packages/epetraext/Makefile.export.EpetraExt
+include $(TRILINOS_BUILD_HOME)/packages/teuchos/Makefile.export.Teuchos
 
 # Make sure to use same compilers and flags as Trilinos
 CXX=$(Epetra_CXX_COMPILER)

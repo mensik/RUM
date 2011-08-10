@@ -121,3 +121,7 @@ Epetra_SerialDenseMatrix Brick::getJacobian(Epetra_SerialDenseMatrix dN) {
 	return J;
 }
 
+ double Brick::getFaceArea(int idFace) {
+	 return 0;
+}
+

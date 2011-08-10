@@ -24,6 +24,8 @@ public:
 		return 3;
 	}
 
+	virtual double getFaceArea(int idFace) = 0;
+
 };
 
 #endif /* CELL_H_ */
