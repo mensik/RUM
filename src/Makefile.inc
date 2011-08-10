@@ -1,4 +1,3 @@
-TRILINOS_BUILD_HOME=/home/martin/documents/code/trilinos/build
 include $(TRILINOS_BUILD_HOME)/packages/epetra/Makefile.export.Epetra
 include $(TRILINOS_BUILD_HOME)/packages/epetraext/Makefile.export.EpetraExt
 include $(TRILINOS_BUILD_HOME)/packages/teuchos/Makefile.export.Teuchos
