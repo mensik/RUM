@@ -1,49 +1,19 @@
 #include "FEMLaplaceAssembler.h"
 
-FEMLaplaceAssembler::FEMLaplaceAssembler() {
-	nextDOFPos = 0;
-}
-
 void FEMLaplaceAssembler::assembleFEM(Mesh *mesh, Epetra_Comm *Comm) {
 
-	Epetra_Map Map(mesh->getNumDOFS(), 0, *Comm);
-
-	Kgraph = new Epetra_FECrsGraph(Copy, Map, 3);
-
-	for (std::map<int, Element*>::iterator i = mesh->getBeginElementIterator(); i
-			!= mesh->getEndElementIterator(); i++) {
-		i->second->acceptPrepare(this);
-	}
-	Kgraph->GlobalAssemble();
-
-	K = new Epetra_FECrsMatrix(Copy, *Kgraph);
+	AssemblyPreparer *preparer = new AssemblyPreparer(dofMap);
+	K = preparer->prepareMatrix(mesh, Comm);
 
 	for (std::map<int, Element*>::iterator i = mesh->getBeginElementIterator(); i
 			!= mesh->getEndElementIterator(); i++) {
-		i->second->acceptAssembly(this);
+		i->second->acceptVisitor(this);
 	}
 
 	K->GlobalAssemble();
-	//cout << (*K);
 }
 
-void FEMLaplaceAssembler::prepareAssembly(Brick8 *el) {
-	Epetra_IntSerialDenseVector indexes(8);
-	Epetra_SerialDenseMatrix zeros(8, 8);
-
-	for (int i = 0; i < 8; i++) {
-		if (dofMap.count(el->getPoint(i)) == 0) {
-			indexes(i) = nextDOFPos;
-			dofMap[el->getPoint(i)] = nextDOFPos++;
-		} else {
-			indexes(i) = dofMap[el->getPoint(i)];
-		}
-	}
-	Kgraph->InsertGlobalIndices(indexes.Length(), indexes.Values(), indexes.Length(), indexes.Values());
-
-}
-
-void FEMLaplaceAssembler::assemble(Brick8 *el) {
+void FEMLaplaceAssembler::visit(Brick8 *el) {
 
 	Epetra_SerialDenseMatrix Kloc(8, 8);
 
@@ -92,27 +62,7 @@ void FEMLaplaceAssembler::assemble(Brick8 *el) {
 	K->SumIntoGlobalValues(indexes, indexes, Kloc);
 }
 
-void FEMLaplaceAssembler::prepareAssembly(Triangle3 *t) {
-	Epetra_IntSerialDenseVector indexes(3);
-	Epetra_SerialDenseMatrix zeros(3, 3);
-
-	zeros(1, 1) = 1;
-
-	for (int i = 0; i < 3; i++) {
-		if (dofMap.count(t->getPoint(i)) == 0) {
-			indexes(i) = nextDOFPos;
-			dofMap[t->getPoint(i)] = nextDOFPos++;
-		} else {
-			indexes(i) = dofMap[t->getPoint(i)];
-		}
-	}
-	Kgraph->InsertGlobalIndices(indexes.Length(), indexes.Values(), indexes.Length(), indexes.Values());
-	//K->InsertGlobalValues(indexes, zeros);
-
-	//cout << zeros;
-}
-
-void FEMLaplaceAssembler::assemble(Triangle3 *t) {
+void FEMLaplaceAssembler::visit(Triangle3 *t) {
 	//cout << force->getValue(t->getCenter()) << endl;
 
 	Epetra_SerialDenseMatrix R(2, 2);
@@ -146,8 +96,6 @@ void FEMLaplaceAssembler::assemble(Triangle3 *t) {
 	for (int i = 0; i < 3; i++)
 		indexes(i) = dofMap[t->getPoint(i)];
 
-	cout << Kloc;
-	cout << indexes;
-
 	K->SumIntoGlobalValues(indexes, indexes, Kloc);
 }
+

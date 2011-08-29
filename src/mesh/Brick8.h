@@ -8,7 +8,8 @@
 #ifndef BRICK8_H_
 #define BRICK8_H_
 
-#include <iostream>
+#include <string>
+
 #include "Brick.h"
 
 class Brick8: public Brick {
@@ -20,19 +21,22 @@ public:
 
 	}
 
-	virtual void acceptAssembly(ElementAssemblyVisitor *visitor) {
-		visitor->assemble(this);
+	virtual void acceptVisitor(ElementVisitor *visitor) {
+		visitor->visit(this);
 	}
 
-	virtual void acceptPrepare(ElementAssemblyVisitor *visitor) {
-		visitor->prepareAssembly(this);
-	}
 
-	virtual void Print() {
-		std::cout << "Brick :" << std::endl;
-		for (int i = 0; i < 8; i++) {
-			vetrices[i]->Print();
+	virtual void describe(Teuchos::FancyOStream &out,
+			const Teuchos::EVerbosityLevel verbLevel = verbLevel_default) const {
+
+		out << description() << std::endl;
+		out.pushTab(1);
+		if (verbLevel > Teuchos::VERB_LOW) {
+			for (int i = 0; i < 8; i++) {
+				vetrices[i]->describe(out, verbLevel);
+			}
 		}
+		out.popTab();
 	}
 };
 

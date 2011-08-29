@@ -9,26 +9,23 @@
 #define TRIANGLE3_H_
 
 #include "Triangle.h"
-#include "ElementAssemblyVisitor.h"
 
 class Triangle3: public Triangle {
 
 public:
-	Triangle3(Point *a, Point *b, Point *c) : Triangle(a, b, c){
+	Triangle3(Point *a, Point *b, Point *c) :
+		Triangle(a, b, c) {
 
 	}
 
-	virtual void Print() {
+	virtual void describe(Teuchos::FancyOStream &out,
+			const Teuchos::EVerbosityLevel verbLevel = verbLevel_default) const {
 		for (int i = 0; i < 3; i++) {
-			vetrices[i]->Print();
+			vetrices[i]->describe(out, verbLevel);
 		}
 	}
-	virtual void acceptAssembly(ElementAssemblyVisitor *visitor) {
-		visitor->assemble(this);
-	}
-
-	virtual void acceptPrepare(ElementAssemblyVisitor *visitor) {
-		visitor->prepareAssembly(this);
+	virtual void acceptVisitor(ElementVisitor *visitor) {
+		visitor->visit(this);
 	}
 };
 

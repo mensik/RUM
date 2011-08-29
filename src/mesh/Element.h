@@ -10,8 +10,9 @@
 
 #include "Point.h"
 #include "GaussPoint.h"
-#include "ElementAssemblyVisitor.h"
+#include "ElementVisitor.h"
 #include "Epetra_SerialDenseMatrix.h"
+#include "Teuchos_Describable.hpp"
 
 #include <vector>
 
@@ -24,7 +25,7 @@
  *
  */
 
-class Element {
+class Element: public Teuchos::Describable {
 
 	ElementInfo info;
 
@@ -34,16 +35,12 @@ public:
 	//@ {
 	virtual int getDimension() = 0;
 
-	virtual void Print() = 0;
-
 	virtual Point* getCenter() = 0;
 	//@}
 
-	//! @name Assembly Visitor methods
+	//! @name Visitor methods
 	//@{
-	virtual void acceptAssembly(ElementAssemblyVisitor *visitor) = 0;
-
-	virtual void acceptPrepare(ElementAssemblyVisitor *visitor) = 0;
+	virtual void acceptVisitor(ElementVisitor *visitor) = 0;
 	//@}
 
 	ElementInfo* getInfo() {

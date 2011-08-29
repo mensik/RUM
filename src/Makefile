@@ -4,7 +4,7 @@ DIRS = mesh assembly common
 OBJLIBS = libmesh.a 
 MY_LIBS = -L. -lmesh 
 
-OBJS = mesh/Mesh.o mesh/Point.o mesh/Element.o mesh/Face.o mesh/Triangle.o mesh/Triangle3.o mesh/Cell.o mesh/ElementAssemblyVisitor.o mesh/Brick.o mesh/Brick8.o assembly/FEMLaplaceAssembler.o 
+OBJS = mesh/Mesh.o mesh/Point.o mesh/Element.o mesh/Face.o mesh/Triangle.o mesh/Triangle3.o mesh/Cell.o mesh/ElementVisitor.o mesh/Brick.o mesh/Brick8.o assembly/FEMLaplaceAssembler.o assembly/AssemblyPreparer.o 
 
 all: Test1.exe
 
@@ -19,4 +19,4 @@ clean:
 	-for d in $(DIRS); do (cd $$d; rm -f *.o; cd .. ); done
 
 force_look:
-	true
+	rue

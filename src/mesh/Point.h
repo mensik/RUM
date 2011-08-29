@@ -9,9 +9,10 @@
 #define POINT_H_
 
 #include <iostream>
+#include "Teuchos_Describable.hpp"
 #include "math.h"
 
-class Point {
+class Point: virtual public Teuchos::Describable {
 	double coord[3];
 
 public:
@@ -32,8 +33,10 @@ public:
 		coord[dim] = c;
 	}
 
-	void Print() {
-		std::cout << "coords: " << coord[0] << " " << coord[1] << " " << coord[2] << std::endl;
+	virtual void describe(Teuchos::FancyOStream &out,
+			const Teuchos::EVerbosityLevel verbLevel = verbLevel_default) const {
+		out << "coords: " << coord[0] << " " << coord[1] << " " << coord[2]
+				<< std::endl;
 	}
 
 };

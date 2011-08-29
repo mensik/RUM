@@ -36,25 +36,27 @@ int main(int argc, char *argv[]) {
 
 	Epetra_Time timer(Comm);
 
-	Mesh *mesh = new Mesh();
-	mesh->makeBrickMesh(30);
+	Mesh mesh;
+	mesh.makeBrickMesh(2);
 
 	TestMaterial* material = new TestMaterial();
 
-	for (std::map<int, Element*>::iterator i = mesh->getBeginElementIterator(); i
-			!= mesh->getEndElementIterator(); i++) {
+	for (std::map<int, Element*>::iterator i = mesh.getBeginElementIterator(); i
+			!= mesh.getEndElementIterator(); i++) {
 		i->second->getInfo()->setMaterial(material);
+
+		std::cout << *(i->second) << std::endl;
 	}
 
 	FEMLaplaceAssembler *assembler = new FEMLaplaceAssembler();
 
-	assembler->assembleFEM(mesh, &Comm);
+	assembler->assembleFEM(&mesh, &Comm);
 
-	mesh->Print();
+	std::cout << mesh;
+
 	std::cout << "Time : " << timer.ElapsedTime() << "s" << std::endl;
 
 	EpetraExt::RowMatrixToMatrixMarketFile("../matlab/K.mm", *assembler->getK(), "3D LaplaceBrick", "This is a test matrix");
-
 	MPI_Finalize();
 	return (0);
 }

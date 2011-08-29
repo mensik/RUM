@@ -1,5 +1,15 @@
 #include "Mesh.h"
 
+void Mesh::describe(Teuchos::FancyOStream &out,
+		const Teuchos::EVerbosityLevel verbLevel) const {
+	out << "-------------" << std::endl;
+	out << "  MESH INFO" << std::endl;
+	out << "-------------" << std::endl;
+	out << "Node Count    : " << nodes.size() << std::endl;
+	out << "Element Count : " << elements.size() << std::endl;
+	out << "-------------" << std::endl;
+}
+
 void Mesh::makeBrickMesh(int n) {
 
 	int count = 0;
@@ -27,7 +37,6 @@ void Mesh::makeBrickMesh(int n) {
 						+ 1)];
 				points[7]
 						= nodes[(i) * (n + 1) * (n + 1) + (j + 1) * (n + 1) + (k + 1)];
-
 
 				Brick8 *brick = new Brick8(points);
 				//brick->Print();

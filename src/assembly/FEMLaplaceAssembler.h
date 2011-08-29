@@ -14,12 +14,15 @@
 #include "../mesh/Mesh.h"
 #include "../mesh/Element.h"
 #include "../mesh/Triangle.h"
-#include "../mesh/ElementAssemblyVisitor.h"
+#include "AbstractAssembler.h"
+#include "AssemblyPreparer.h"
 
 #include "../mesh/PointScalarFunction.h"
 #include "../mesh/MatrixPointFunction.h"
 
 #include <map>
+
+#include "Teuchos_RCP.hpp"
 
 #include "Epetra_MpiComm.h"
 #include "Epetra_Map.h"
@@ -31,32 +34,22 @@
 #include "Epetra_IntSerialDenseVector.h"
 #include "Epetra_Vector.h"
 
-class FEMLaplaceAssembler: public ElementAssemblyVisitor {
-
-
-	Epetra_FECrsGraph *Kgraph;
+class FEMLaplaceAssembler : public AbstractAssembler {
 
 	Epetra_FECrsMatrix *K;
 	Epetra_Vector *f;
 
 	std::map<Point*, int> dofMap;
 
-	int nextDOFPos;
 public:
-
-	FEMLaplaceAssembler();
-
 	void assembleFEM(Mesh *mesh, Epetra_Comm *Comm);
-
-	virtual void prepareAssembly(Brick8 *el);
-	virtual void prepareAssembly(Triangle3 *t);
-
-	virtual void assemble(Brick8 *el);
-	virtual void assemble(Triangle3 *t);
 
 	Epetra_FECrsMatrix* getK() {
 		return K;
 	}
+
+	virtual void visit(Brick8* el);
+	virtual void visit(Triangle3* el);
 };
 
 #endif /* FEMLAPLACEASSEMBLER_H_ */
