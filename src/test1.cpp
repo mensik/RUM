@@ -44,8 +44,6 @@ int main(int argc, char *argv[]) {
 	for (std::map<int, Element*>::iterator i = mesh.getBeginElementIterator(); i
 			!= mesh.getEndElementIterator(); i++) {
 		i->second->getInfo()->setMaterial(material);
-
-		std::cout << *(i->second) << std::endl;
 	}
 
 	FEMLaplaceAssembler *assembler = new FEMLaplaceAssembler();

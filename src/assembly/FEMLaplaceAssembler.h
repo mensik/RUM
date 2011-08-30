@@ -17,10 +17,8 @@
 #include "AbstractAssembler.h"
 #include "AssemblyPreparer.h"
 
-#include "../mesh/PointScalarFunction.h"
-#include "../mesh/MatrixPointFunction.h"
-
 #include <map>
+#include <vector>
 
 #include "Teuchos_RCP.hpp"
 
@@ -34,12 +32,19 @@
 #include "Epetra_IntSerialDenseVector.h"
 #include "Epetra_Vector.h"
 
+//! FEMLaplaceAssembler : provides implementation of FEMLaplace
+
+/*! FEMLaplaceAssembler class provides basic implementatino of Laplace equation
+ *  over basic elements. For the preparation of the matrix it uses AssemblyPreparer.
+ *
+ */
+
 class FEMLaplaceAssembler : public AbstractAssembler {
 
 	Epetra_FECrsMatrix *K;
 	Epetra_Vector *f;
 
-	std::map<Point*, int> dofMap;
+	DofMapper dofMap;
 
 public:
 	void assembleFEM(Mesh *mesh, Epetra_Comm *Comm);

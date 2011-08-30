@@ -2,7 +2,9 @@
 
 void FEMLaplaceAssembler::assembleFEM(Mesh *mesh, Epetra_Comm *Comm) {
 
-	AssemblyPreparer *preparer = new AssemblyPreparer(dofMap);
+	dofMap;
+	AssemblyPreparer *preparer = new AssemblyPreparer(&dofMap, 1);
+
 	K = preparer->prepareMatrix(mesh, Comm);
 
 	for (std::map<int, Element*>::iterator i = mesh->getBeginElementIterator(); i
@@ -55,9 +57,8 @@ void FEMLaplaceAssembler::visit(Brick8 *el) {
 	}
 
 	Epetra_IntSerialDenseVector indexes(8);
-
 	for (int i = 0; i < 8; i++)
-		indexes(i) = dofMap[el->getPoint(i)];
+		indexes(i) = dofMap[el->getPoint(i)][0];
 
 	K->SumIntoGlobalValues(indexes, indexes, Kloc);
 }
@@ -94,7 +95,7 @@ void FEMLaplaceAssembler::visit(Triangle3 *t) {
 	Epetra_IntSerialDenseVector indexes(3);
 
 	for (int i = 0; i < 3; i++)
-		indexes(i) = dofMap[t->getPoint(i)];
+		indexes(i) = dofMap[t->getPoint(i)][0];
 
 	K->SumIntoGlobalValues(indexes, indexes, Kloc);
 }

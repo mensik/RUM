@@ -16,6 +16,8 @@
 /*!
  * AbstractAssembler provides empty implementation with warnings of ElementVisitor interface. It can be used if you
  * are planing not to implement all types of elements.
+ *
+ * \todo Considering use of exceotions here
  */
 
 class AbstractAssembler: public ElementVisitor {

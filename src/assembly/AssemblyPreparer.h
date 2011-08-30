@@ -10,6 +10,9 @@
 
 
 #include <map>
+#include <vector>
+#include <iostream>
+
 #include "Teuchos_RCP.hpp"
 
 #include "Epetra_MpiComm.h"
@@ -25,29 +28,47 @@
 #include "../mesh/Brick8.h"
 #include "../mesh/Mesh.h"
 
-//! AssemblyPreparer : class allocated NZ parts of stiffness matrix (1dof per node)
+//! DofMapper : compound type for describing dof mappings
+typedef std::map<Point*, std::vector<int> > DofMapper;
 
+//! AssemblyPreparer : class allocated NZ parts of stiffness matrix (1dof per node)
 /*!
  * AssemblyPreparer takes the referenco to dofMap and provided mesh and communication
- * objects allocate matrix for stifness matrix. For usage see FEMLaplaceAssembler
+ * objects allocate matrix for stifness matrix. For usage see FEMLaplaceAssembler.
+ *
+ * Apart from preparing the matrix it also fills a provided DOF mapper. To each Point
+ * pointer is attached a vector of the position indexes in the matrix.
  */
 
 class AssemblyPreparer : public AbstractAssembler {
-	std::map<Point*, int> dofMap;
 
+	DofMapper *dofMap;
 	Epetra_FECrsGraph *Kgraph;
+
+	int dofDim;
 
 	int nextDOFPos;
 
+	void prepare(Point** pArr, int nPoints);
+
 public:
-	AssemblyPreparer(std::map<Point*, int> &dM) {
+
+	//! Default constructor
+	/*!
+	 * \param dM  - pointer to dofMapper that should be filled during preparation
+	 * \param dim - dimension of dofs on each node
+	 */
+	AssemblyPreparer(DofMapper *dM, int dim) {
 		dofMap = dM;
+		dofDim = dim;
 		nextDOFPos = 0;
 	}
 
+	//! Prepare matrix for the provided mesh and comunicator
 	Epetra_FECrsMatrix* prepareMatrix(Mesh *mesh, Epetra_Comm *Comm);
 
 	virtual void visit(Brick8 *el);
+	virtual void visit(Triangle3 *el);
 };
 
 #endif /* ASSEMBLYPREPARER_H_ */
